@@ -10,15 +10,15 @@
 
 class Logger {
 public:
-	Logger(std::string const& filename) {                                    // в конструкторе
-		_file.open(filename, std::ios::out | std::ios::in | std::ios::app);  // создаю (или открываю, если уже создан) файл с именем filename на запись в конец файла
-		if (!_file.is_open()) {                                              // если файл не открылся (не удалось создать)
-			throw std::exception("Failed to open file!");                    // кидаю исключение
+	Logger(std::string const& filename) {                                    // РІ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРµ
+		_file.open(filename, std::ios::out | std::ios::in | std::ios::app);  // СЃРѕР·РґР°СЋ (РёР»Рё РѕС‚РєСЂС‹РІР°СЋ, РµСЃР»Рё СѓР¶Рµ СЃРѕР·РґР°РЅ) С„Р°Р№Р» СЃ РёРјРµРЅРµРј filename РЅР° Р·Р°РїРёСЃСЊ РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
+		if (!_file.is_open()) {                                              // РµСЃР»Рё С„Р°Р№Р» РЅРµ РѕС‚РєСЂС‹Р»СЃСЏ (РЅРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ)
+			throw std::exception("Failed to open file!");                    // РєРёРґР°СЋ РёСЃРєР»СЋС‡РµРЅРёРµ
 		}
 	}
 
-	~Logger() {         // в деструкторе
-		_file.close();  // закрываю файл
+	~Logger() {         // РІ РґРµСЃС‚СЂСѓРєС‚РѕСЂРµ
+		_file.close();  // Р·Р°РєСЂС‹РІР°СЋ С„Р°Р№Р»
 	}
 
 	void write(std::stringstream const& value) {
@@ -40,7 +40,7 @@ public:
 		_file.seekg(0, std::ios::beg);
 
 		while (true) {
-			string s;                   // переменная для хранения считанной из файла логов строки
+			string s;                   // РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЃС‡РёС‚Р°РЅРЅРѕР№ РёР· С„Р°Р№Р»Р° Р»РѕРіРѕРІ СЃС‚СЂРѕРєРё
 
 
 			getline(_file, s);

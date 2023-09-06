@@ -1,32 +1,32 @@
 #include <exception>
-//#include <format>  // Одно из направлений доработки данной программы в будущем, для более удобного форматирования.
+//#include <format>  // РћРґРЅРѕ РёР· РЅР°РїСЂР°РІР»РµРЅРёР№ РґРѕСЂР°Р±РѕС‚РєРё РґР°РЅРЅРѕР№ РїСЂРѕРіСЂР°РјРјС‹ РІ Р±СѓРґСѓС‰РµРј, РґР»СЏ Р±РѕР»РµРµ СѓРґРѕР±РЅРѕРіРѕ С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёСЏ.
 #include <sstream>
 #include "sql.h"
 
 Sql::Sql(std::string const& hostname, std::string const& username, std::string const& password, std::string const& database) {
 	int i = 0;
 
-	// Получаем дескриптор соединения
+	// РџРѕР»СѓС‡Р°РµРј РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРµРґРёРЅРµРЅРёСЏ
 	mysql_init(&_mysql);
 	if (&_mysql == nullptr) {
-		// Если дескриптор не получен — выводим сообщение об ошибке
+		// Р•СЃР»Рё РґРµСЃРєСЂРёРїС‚РѕСЂ РЅРµ РїРѕР»СѓС‡РµРЅ вЂ” РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
 		cout << "Error: can't create MySQL-descriptor" << endl;
 	}
 
-	// Подключаемся к серверу
+	// РџРѕРґРєР»СЋС‡Р°РµРјСЃСЏ Рє СЃРµСЂРІРµСЂСѓ
 	if (!mysql_real_connect(&_mysql, hostname.c_str(), username.c_str(), password.c_str(), database.c_str(), NULL, NULL, 0)) {
-		// Если нет возможности установить соединение с БД выводим сообщение об ошибке
+		// Р•СЃР»Рё РЅРµС‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” РІС‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
 		throw std::exception("Error: can't connect to database");
 	}
 
 	mysql_set_character_set(&_mysql, "utf8");
 
-	//Смотрим изменилась ли кодировка на нужную, по умолчанию идёт latin1
+	//РЎРјРѕС‚СЂРёРј РёР·РјРµРЅРёР»Р°СЃСЊ Р»Рё РєРѕРґРёСЂРѕРІРєР° РЅР° РЅСѓР¶РЅСѓСЋ, РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёРґС‘С‚ latin1
 	//cout << "connection characterset: " << mysql_character_set_name(&mysql) << endl;
 }
 
 Sql::~Sql() {
-	// Закрываем соединение с сервером базы данных
+	// Р—Р°РєСЂС‹РІР°РµРј СЃРѕРµРґРёРЅРµРЅРёРµ СЃ СЃРµСЂРІРµСЂРѕРј Р±Р°Р·С‹ РґР°РЅРЅС‹С…
 	mysql_close(&_mysql);
 }
 
@@ -35,9 +35,9 @@ bool Sql::recv_messages(std::vector<Message>& messages) {
 	MYSQL_ROW row;
 	auto success = true;
 
-	mysql_query(&_mysql, "SELECT * FROM messages"); //Делаем запрос к таблице
+	mysql_query(&_mysql, "SELECT * FROM messages"); //Р”РµР»Р°РµРј Р·Р°РїСЂРѕСЃ Рє С‚Р°Р±Р»РёС†Рµ
 
-	//Выводим все что есть в таблице через цикл
+	//Р’С‹РІРѕРґРёРј РІСЃРµ С‡С‚Рѕ РµСЃС‚СЊ РІ С‚Р°Р±Р»РёС†Рµ С‡РµСЂРµР· С†РёРєР»
 	if (res = mysql_store_result(&_mysql)) {
 		while (row = mysql_fetch_row(res)) {
 			if (mysql_num_fields(res) >= 3) {
@@ -56,7 +56,7 @@ bool Sql::recv_messages(std::vector<Message>& messages) {
 bool Sql::send_messages(std::vector<Message> const& messages) {
 	auto success = true;
 	for (auto const& message : messages) {
-		/*std::string const query = std::format("INSERT INTO messages(login_from, login_to, text) values({}, {}, {})",   // в этом месте планирую использовать <format>
+		/*std::string const query = std::format("INSERT INTO messages(login_from, login_to, text) values({}, {}, {})",   // РІ СЌС‚РѕРј РјРµСЃС‚Рµ РїР»Р°РЅРёСЂСѓСЋ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ <format>
 			message.getUserFrom(), message.getUserTo(), message.getUserMessage());*/
 		std::stringstream query;
 		query << "INSERT INTO messages(login_from, login_to, text) values("
@@ -74,9 +74,9 @@ bool Sql::recv_users(std::vector<User>& users) {
 	MYSQL_ROW row;
 	auto success = true;
 
-	mysql_query(&_mysql, "SELECT * FROM users"); //Делаем запрос к таблице
+	mysql_query(&_mysql, "SELECT * FROM users"); //Р”РµР»Р°РµРј Р·Р°РїСЂРѕСЃ Рє С‚Р°Р±Р»РёС†Рµ
 
-	//Выводим все что есть в таблице через цикл
+	//Р’С‹РІРѕРґРёРј РІСЃРµ С‡С‚Рѕ РµСЃС‚СЊ РІ С‚Р°Р±Р»РёС†Рµ С‡РµСЂРµР· С†РёРєР»
 	if (res = mysql_store_result(&_mysql)) {
 		while (row = mysql_fetch_row(res)) {
 			if (mysql_num_fields(res) >= 2) {

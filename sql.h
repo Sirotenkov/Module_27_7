@@ -12,11 +12,11 @@ public:
     Sql(std::string const& hostname, std::string const& username, std::string const& password, std::string const& database);
     ~Sql();
 
-    // Функции для работы с таблицей 'messages'
+    // Р¤СѓРЅРєС†РёРё РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ С‚Р°Р±Р»РёС†РµР№ 'messages'
     bool recv_messages(std::vector<Message>& messages);
     bool send_messages(std::vector<Message> const& messages);
 
-    // Функции для работы с таблицей 'users'
+    // Р¤СѓРЅРєС†РёРё РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ С‚Р°Р±Р»РёС†РµР№ 'users'
     bool recv_users(std::vector<User>& users);
     bool send_users(std::vector<User> const& users);
 
