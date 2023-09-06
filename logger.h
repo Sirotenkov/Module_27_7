@@ -21,13 +21,6 @@ public:
 		_file.close();  // закрываю файл
 	}
 
-	// Logger log;
-	// log << ""hello" << 45 << 'a';
-	/*Logger& operator<<(std::string const& value);
-	Logger& operator<<(char const* value);
-	Logger& operator<<(int value);
-	Logger& operator<<(char value);*/
-
 	void write(std::stringstream const& value) {
 		_mutex.lock();
 		_file << value.str() << std::endl;
@@ -42,10 +35,6 @@ public:
 
 	std::stringstream read() {
 		std::stringstream ss;
-
-		//ifstream file(filename);  // файл из которого считываются строки логов
-		//if (!file.is_open())
-		//	return { };
 
 		_mutex.lock();
 		_file.seekg(0, std::ios::beg);
@@ -65,36 +54,7 @@ public:
 		_mutex.unlock();
 
 		return ss;
-
-		/*while (getline(file, s)) {  // пока не достигнут конец файла добавлять очередную строку в переменную (s)
-			_mutex.lock();
-			cout << s << endl;      // вывод на экран
-			s += "\n";              // перевод на новую строку
-			cout << s << endl;      // дальнейший вывод информации на экран (без записи в файл)
-			_mutex.unlock();
-		}*/
 	}
-
-	/*template<typename ty>
-	Logger& operator<<(ty const& value) {
-		_mutex.lock();
-		_fout << value;
-		_mutex.unlock();
-		return *this;
-	}*/
-
-	/*void printLogFile() {
-		string s;                   // переменная для хранения считанных из файла логов строк
-		ifstream file("chat.log");  // файл из которого считываются строки логов
-
-		while (getline(file, s)) {  // пока не достигнут конец файла добавлять очередную строку в переменную (s)
-			_mutex.lock();
-			cout << s << endl;      // вывод на экран
-			s += "\n";              // перевод на новую строку
-			cout << s << endl;      // дальнейший вывод информации на экран (без записи в файл)
-			_mutex.unlock();
-		}
-	}*/
 
 private:
 	std::shared_mutex _mutex;
